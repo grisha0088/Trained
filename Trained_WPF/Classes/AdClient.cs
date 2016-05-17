@@ -115,8 +115,15 @@ namespace Trained_WPF.Classes
                 //логируем добавление
                 Classes.NLog.OperationToLog("AddUser: ", userId, _author);
             }
-            catch (System.Exception e)
+            catch (System.DirectoryServices.AccountManagement.PrincipalExistsException e)
             {
+                status.Content = "Пользователь " + userId.ToString() + " уже есть в группе";
+
+                Classes.NLog.ExceptionToLog("Error adding user: " + e.ToString() + "");
+            }
+
+            catch (System.Exception e)
+            {                
                 Classes.NLog.ExceptionToLog("Error adding user: " + e.ToString() + "");
             }
 
