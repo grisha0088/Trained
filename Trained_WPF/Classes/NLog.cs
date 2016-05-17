@@ -34,11 +34,11 @@ namespace Trained_WPF.Classes
         }
 
         //лог операций
-        public static void OperationToLog(string operationType, String userId, string author)
+        public static void OperationToLog(string operationType, String userId)
         {
             try
             {
-                Logger.Info(operationType + "'" + userId + "';" + " Processed by: " + author);
+                Logger.Info(operationType + "'" + userId + "';");
             }
             catch
             {

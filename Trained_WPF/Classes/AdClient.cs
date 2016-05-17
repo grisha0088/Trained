@@ -7,8 +7,7 @@ namespace Trained_WPF.Classes
 {
    public class AdClient
    {
-       private readonly string _domainName;
-       readonly string _author = Environment.UserDomainName;
+        private readonly string _domainName;
         
         public AdClient(string domainName)
        {
@@ -100,7 +99,7 @@ namespace Trained_WPF.Classes
                 status.Content = "Пользователь " + userId + " добавлен в группу";
 
                 //логируем добавление
-                NLog.OperationToLog("AddUser: ", userId, _author);
+                NLog.OperationToLog("AddUser: ", userId);
             }
             catch (PrincipalExistsException e)
             {
@@ -132,7 +131,7 @@ namespace Trained_WPF.Classes
                 status.Content = "Пользователь " + userId + " удалён из группы";
 
                 //логируем удаление               
-                NLog.OperationToLog("RemoveUser: ", userId, _author);
+                NLog.OperationToLog("RemoveUser: ", userId);
 
             }
             catch (Exception e)
