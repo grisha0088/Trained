@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.DirectoryServices.AccountManagement;
 using System.Windows.Controls;
 
@@ -12,12 +8,12 @@ namespace Trained_WPF.Classes
    public class AdClient
    {
        private readonly string _domainName;
-       readonly string _author = Environment.UserDomainName.ToString();
+       readonly string _author = Environment.UserDomainName;
         
         public AdClient(string domainName)
        {
-            this._domainName = domainName;                        
-        }
+            _domainName = domainName;                        
+       }
 
         public void LoadUsersGroup(ObservableCollection<UserGroup> namesGroup, string groupName)
         {
@@ -25,40 +21,32 @@ namespace Trained_WPF.Classes
 
             try
             {
-
-
                 using (var ctx = new PrincipalContext(ContextType.Domain, _domainName))
                 {
                     using (var group = GroupPrincipal.FindByIdentity(ctx, groupName))
                     {
-
-                        var users = group.GetMembers(true);
-                        //users.ToList().ForEach(x => Debug.WriteLine(x.UserPrincipalName));
-                        //Debug.WriteLine("");
-
-
-                        foreach (UserPrincipal user in users)
+                        if (@group != null)
                         {
+                            var users = @group.GetMembers(true);
+                            //users.ToList().ForEach(x => Debug.WriteLine(x.UserPrincipalName));
+                            //Debug.WriteLine("");
 
-                            namesGroup.Add(new UserGroup() { UpnGroup = user.UserPrincipalName, NameGroup = user.Name });
 
-
+                            foreach (var principal in users)
+                            {
+                                var user = (UserPrincipal) principal;
+                                namesGroup.Add(new UserGroup() { UpnGroup = user.UserPrincipalName, NameGroup = user.Name });
+                            }
                         }
-
                     }
                 }
-
-
-
 
 
             }
             catch (Exception e)
             {
-                Classes.NLog.ExceptionToLog("Error loading users in group: " + e.ToString() + "");
+                NLog.ExceptionToLog("Error loading users in group: " + e + "");
             }
-
-
         }
 
         public ObservableCollection<UserAd> LoadUsersInAd(string searchName, ObservableCollection<UserAd> namesAd)
@@ -82,14 +70,12 @@ namespace Trained_WPF.Classes
                             // DT.Rows.Add(found.DisplayName.ToString(), found.UserPrincipalName);
                             namesAd.Add(new UserAd() { UpnAd = found.UserPrincipalName, NameAd = found.Name });
                         }
-
                     }
                 }
-
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                Classes.NLog.ExceptionToLog("Error loading users in AD: " + e.ToString() + "");
+                NLog.ExceptionToLog("Error loading users in AD: " + e + "");
             }
 
 
@@ -99,61 +85,60 @@ namespace Trained_WPF.Classes
 
         public void AddUser2Group(Label status, String userId, string groupName)
         {
-
             try
             {
                 using (var ctx = new PrincipalContext(ContextType.Domain, _domainName))
                 {
                     GroupPrincipal group = GroupPrincipal.FindByIdentity(ctx, groupName);
+                    if (group != null)
+                    { 
                     group.Members.Add(ctx, IdentityType.UserPrincipalName, userId);
                     group.Save();
+                    }
                 }
 
-                status.Content = "Пользователь " + userId.ToString() + " добавлен в группу";
-
+                status.Content = "Пользователь " + userId + " добавлен в группу";
 
                 //логируем добавление
-                Classes.NLog.OperationToLog("AddUser: ", userId, _author);
+                NLog.OperationToLog("AddUser: ", userId, _author);
             }
-            catch (System.DirectoryServices.AccountManagement.PrincipalExistsException e)
+            catch (PrincipalExistsException e)
             {
-                status.Content = "Пользователь " + userId.ToString() + " уже есть в группе";
+                status.Content = "Пользователь " + userId + " уже есть в группе";
 
-                Classes.NLog.ExceptionToLog("Error adding user: " + e.ToString() + "");
+                NLog.ExceptionToLog("Error adding user: " + e + "");
             }
 
-            catch (System.Exception e)
+            catch (Exception e)
             {                
-                Classes.NLog.ExceptionToLog("Error adding user: " + e.ToString() + "");
+                NLog.ExceptionToLog("Error adding user: " + e + "");
             }
-
         }
 
         public void RevomeUser(Label status, string userId, string groupName)
         {
-
             try
             {
                 using (var ctx = new PrincipalContext(ContextType.Domain, _domainName))
                 {
                     GroupPrincipal group = GroupPrincipal.FindByIdentity(ctx, groupName);
+                    if (group != null)
+                    { 
                     group.Members.Remove(ctx, IdentityType.UserPrincipalName, userId);
                     group.Save();
+                    }
                 }
 
-                status.Content = "Пользователь " + userId.ToString() + " удалён из группы";
+                status.Content = "Пользователь " + userId + " удалён из группы";
 
                 //логируем удаление               
-                Classes.NLog.OperationToLog("RemoveUser: ", userId, _author);
+                NLog.OperationToLog("RemoveUser: ", userId, _author);
 
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                Classes.NLog.ExceptionToLog("Error removing user: " + e.ToString() + "");
+                NLog.ExceptionToLog("Error removing user: " + e + "");
             }
-
         }
-
-
     }
 }

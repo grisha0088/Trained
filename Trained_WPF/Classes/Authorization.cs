@@ -1,73 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.DirectoryServices.AccountManagement;
-using System.Security.Principal;
 
 namespace Trained_WPF.Classes
 {
     public class Authorization
     {
-
-        public static string GrouptoCheck = "Uk.Access.Dutty";
-
-        public static void CheckGroups()
+        public static bool CheckGroups(string domainName, string grouptoCheck)
         {
-
             //Проверяем, что пользователь в группе
-
-            PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "2GIS");
-            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, Environment.UserDomainName.ToString() + "\\" + Environment.UserName.ToString());            
-
-
+            PrincipalContext ctx = new PrincipalContext(ContextType.Domain, domainName);
+            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, Environment.UserDomainName + "\\" + Environment.UserName);            
 
             List<GroupPrincipal> result = new List<GroupPrincipal>();
 
             if (user != null)
             {
-
                 PrincipalSearchResult<Principal> groups = user.GetGroups();
 
                 foreach (Principal p in groups)
                 {
-                    if (p is GroupPrincipal)
+                    var item = p as GroupPrincipal;
+                    if (item != null)
                     {
-                        result.Add((GroupPrincipal)p);
+                        result.Add(item);
                         string results = String.Join(", ", result);
 
-                                                
-
-                        if (results.Contains(GrouptoCheck))
-                        {
-                            MainWindow.FlagClass.FlagAccess = true;
-                            MainWindow.FlagClass.Permiss = Environment.UserDomainName.ToString() + "\\" + Environment.UserName.ToString();
-
-
-                        }
-                        else
-                        {
-
-                            MainWindow.FlagClass.FlagAccess = false;                            
-
+                        if (results.Contains(grouptoCheck))
+                        {                            
+                            return true;
                         }
                     }
                 }
+                return false;
             }
-
-
-
-
+            return false;
         }
 
         public static void UserLogged()
         {
-
-
-                Classes.NLog.AuthToLog("User logged");
-
-
+                NLog.AuthToLog("User logged");
         }
     }
 }

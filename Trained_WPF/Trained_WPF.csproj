@@ -76,6 +76,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Windows.Controls.Input.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -119,7 +120,8 @@
     <Compile Include="Classes\AdClient.cs" />
     <Compile Include="Classes\Authorization.cs" />
     <Compile Include="Classes\NLog.cs" />
-    <Compile Include="Classes\UsersClass.cs" />
+    <Compile Include="Classes\UserGroup.cs" />
+    <Compile Include="Classes\UserAd.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

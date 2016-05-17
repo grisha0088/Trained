@@ -10,7 +10,7 @@
         ResizeMode="NoResize" 
         Icon="Icons/Icon.ico" RenderOptions.BitmapScalingMode="HighQuality"
         WindowStartupLocation="CenterScreen"                  
-        Title="Trained" Height="600" Width="800">
+        Title="Trained" Height="600" Width="1000">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -144,8 +144,6 @@
                 <TextBox x:Name="GroupFilter" Grid.Column="1" Height="10px" TextChanged="GroupFilter_TextChanged" HorizontalAlignment="Stretch"/>
                 <ComboBox x:Name="GroupCombo" Grid.Column="3" Height="10px" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="15">
                     <ComboBoxItem Content="Fiji"></ComboBoxItem>
-                    <ComboBoxItem Content="IR"></ComboBoxItem>
-                    <ComboBoxItem Content="Youla"></ComboBoxItem>
                 </ComboBox>
             </Grid>
 

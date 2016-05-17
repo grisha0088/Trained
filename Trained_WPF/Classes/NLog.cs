@@ -1,28 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using NLog;
-
 
 namespace Trained_WPF.Classes
 {
     class NLog
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        readonly static Logger Logger = LogManager.GetCurrentClassLogger();
 
         //лог авторизации
         public static void AuthToLog(string login)
         {
             try
             {
-                logger.Info(login);
+                Logger.Info(login);
             }
-            catch (Exception)
+            catch
             {
-
+                // ignored
             }
         }
 
@@ -31,11 +25,11 @@ namespace Trained_WPF.Classes
         {
             try
             {
-                logger.Error(exception);
+                Logger.Error(exception);
             }
             catch 
             {
-
+                // ignored
             }
         }
 
@@ -44,11 +38,11 @@ namespace Trained_WPF.Classes
         {
             try
             {
-                logger.Info(operationType + "'" + userId + "';" + " Processed by: " + author);
+                Logger.Info(operationType + "'" + userId + "';" + " Processed by: " + author);
             }
             catch
             {
-
+                // ignored
             }
         }
 

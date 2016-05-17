@@ -1,25 +1,13 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Data;
-using System.DirectoryServices.AccountManagement;
+using System.Configuration;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Threading;
 using Trained_WPF.Classes;
 
 namespace Trained_WPF
@@ -29,34 +17,33 @@ namespace Trained_WPF
     /// </summary>
     /// 
     /// 
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public static string SearchName;
 
         public static ObservableCollection<UserGroup> NamesGroup = new ObservableCollection<UserGroup>();
         public static ObservableCollection<UserAd> NamesAd = new ObservableCollection<UserAd>();
 
-        private const string FijiAdGroup = "UK.Access.Fiji.TeachApproved";
+        readonly string _grouptoCheck = ConfigurationManager.AppSettings["GrouptoCheck"];
+        readonly string _workAdGroup = ConfigurationManager.AppSettings["FijiGroupName"];
+        readonly string _domainName = ConfigurationManager.AppSettings["DomainName"];
 
         readonly AdClient _adClient;
 
         public MainWindow()
         {
             InitializeComponent();
-            Classes.Authorization.CheckGroups();
-
-            if (FlagClass.FlagAccess.Equals(true))
+            Authorization.CheckGroups(_domainName, _grouptoCheck);
+            
+            if (Authorization.CheckGroups(_domainName, _grouptoCheck))
             {
+                _adClient = new AdClient(_domainName);
 
-                _adClient = new AdClient("2GIS");
-
-                Credentials.Content = "|  " + FlagClass.Permiss.ToString();
-                Classes.Authorization.UserLogged();
+                Credentials.Content = "|  " + Environment.UserDomainName + "\\" + Environment.UserName;
+                Authorization.UserLogged();
                 
-                _adClient.LoadUsersGroup(NamesGroup, FijiAdGroup);
+                _adClient.LoadUsersGroup(NamesGroup, _workAdGroup);
                 ListGroup.ItemsSource = NamesGroup;
-
-
 
                 //для фильтрации
                 CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(ListGroup.ItemsSource);
@@ -64,7 +51,6 @@ namespace Trained_WPF
 
                 //селектим GroupCombo
                 GroupCombo.SelectedIndex = 0;
-
             }
             else
             {
@@ -72,18 +58,7 @@ namespace Trained_WPF
                 Application.Current.Shutdown();
             }
         }
-
-
-        public class FlagClass
-        {
-            public static bool FlagAccess;
-            public static string Permiss;
-        }
-
-
         
-
-
         private async void BtnSearchAd_Click(object sender, RoutedEventArgs e)
         {
             SearchName = "*" + SearchBoxAd.Text + "*";
@@ -94,19 +69,17 @@ namespace Trained_WPF
             BtnSearchAd.IsEnabled = false;
             Loader.Visibility=Visibility.Visible;
             Loader.IsIndeterminate = true;
-            status_text.Content = string.Empty;
-
+            status_text.Content = String.Empty;
 
             await slowTask;
 
-            var DT = slowTask.Result;
+            //var dt = slowTask.Result;
 
             BtnSearchAd.IsEnabled = true;
             Loader.IsIndeterminate = false;
             Loader.Visibility = Visibility.Hidden;
 
             ListAd.ItemsSource = NamesAd.ToList();
-
         }
 
 
@@ -119,12 +92,11 @@ namespace Trained_WPF
 
                 //Classes.AddUserGroup.AddUser2Group(status_text, userId);                        
                 //Classes.LoadUsersGroup.LoadUsersGroupMethod(NamesGroup);
-                _adClient.AddUser2Group(status_text, userId, FijiAdGroup);
-                _adClient.LoadUsersGroup(NamesGroup, FijiAdGroup);
+                _adClient.AddUser2Group(status_text, userId, _workAdGroup);
+                _adClient.LoadUsersGroup(NamesGroup, _workAdGroup);
 
                 CollectionViewSource.GetDefaultView(NamesGroup).Refresh();
             }
-
         }
 
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
@@ -133,19 +105,15 @@ namespace Trained_WPF
             {
                 string userId = ListGroup.SelectedValue.ToString();            
 
-            _adClient.RevomeUser(status_text, userId, FijiAdGroup);
-            _adClient.LoadUsersGroup(NamesGroup, FijiAdGroup);
+            _adClient.RevomeUser(status_text, userId, _workAdGroup);
+            _adClient.LoadUsersGroup(NamesGroup, _workAdGroup);
             
             CollectionViewSource.GetDefaultView(NamesGroup).Refresh();
-
             }
-
         }
 
 
-
-
-
+        
 
         private void SearchBoxAd_KeyDown(object sender, KeyEventArgs e)
         {
@@ -165,16 +133,13 @@ namespace Trained_WPF
         private void ListGroup_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
 
-
                 BtnRemove.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
 
         }
 
 
 
-
-
-
+        
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
@@ -219,7 +184,7 @@ namespace Trained_WPF
         private void WindowHeader_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
+                DragMove();
         }
 
 
@@ -228,9 +193,14 @@ namespace Trained_WPF
         private bool UserFilter(object item)
         {
             if (String.IsNullOrEmpty(GroupFilter.Text))
+            { 
                 return true;
+            }
             else
-                return ((item as UserGroup).NameGroup.IndexOf(GroupFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+            {
+                var userGroup = item as UserGroup;
+                return userGroup != null && (userGroup.NameGroup.IndexOf(GroupFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
         }
         private void GroupFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
