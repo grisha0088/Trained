@@ -114,7 +114,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="80px"/>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="SearchBoxAd" Grid.Column="0" HorizontalAlignment="Stretch" Height="30px" FontSize="20px" FontFamily="Calibri" KeyDown="SearchBoxAd_KeyDown"></TextBox>
+                <TextBox x:Name="SearchBoxAd" Grid.Column="0" HorizontalAlignment="Stretch" Height="30px" FontSize="18px" FontFamily="Calibri" KeyDown="SearchBoxAd_KeyDown"></TextBox>
                 <Button x:Name="BtnSearchAd" Grid.Column="1" BorderThickness="0" RenderOptions.BitmapScalingMode="HighQuality" Width="70px" Height="20px" Content="Поиск" FontFamily="Calibri"  Click="BtnSearchAd_Click">
                     <!--<Image Source="Icons/search.png" Height="15px"></Image>-->
                 </Button>
