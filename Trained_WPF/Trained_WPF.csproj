@@ -15,7 +15,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>\\uk-rnd-454\Share\Trained_build\</PublishUrl>
+    <PublishUrl>\\uk-duty01\Trained\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -25,12 +25,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>\\uk-rnd-454\Share\Trained_build\</InstallUrl>
+    <InstallUrl>\\uk-duty01\Trained\</InstallUrl>
     <SupportUrl>https://jira.2gis.ru/servicedesk/customer/portal/2</SupportUrl>
     <ProductName>2GIS Trained</ProductName>
     <PublisherName>support%402gis.ru</PublisherName>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>12</ApplicationRevision>
+    <ApplicationRevision>14</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

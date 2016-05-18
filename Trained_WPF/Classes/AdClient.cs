@@ -8,16 +8,17 @@ namespace Trained_WPF.Classes
    public class AdClient
    {
         private readonly string _domainName;
-        
+
+        private readonly ObservableCollection<UserAd> _namesAd = new ObservableCollection<UserAd>();
+        private readonly ObservableCollection<UserGroup> _namesGroup = new ObservableCollection<UserGroup>();
+
         public AdClient(string domainName)
        {
             _domainName = domainName;                        
        }
 
-        public void LoadUsersGroup(ObservableCollection<UserGroup> namesGroup, string groupName)
+        public ObservableCollection<UserGroup> LoadUsersGroup(string groupName)
         {
-            namesGroup.Clear();
-
             try
             {
                 using (var ctx = new PrincipalContext(ContextType.Domain, _domainName))
@@ -34,23 +35,24 @@ namespace Trained_WPF.Classes
                             foreach (var principal in users)
                             {
                                 var user = (UserPrincipal) principal;
-                                namesGroup.Add(new UserGroup() { UpnGroup = user.UserPrincipalName, NameGroup = user.Name });
+                                _namesGroup.Add(new UserGroup() { UpnGroup = user.UserPrincipalName, NameGroup = user.Name });
                             }
                         }
                     }
                 }
-
-
             }
+
             catch (Exception e)
             {
                 NLog.ExceptionToLog("Error loading users in group: " + e + "");
             }
+
+            return _namesGroup;
+
         }
 
-        public ObservableCollection<UserAd> LoadUsersInAd(string searchName, ObservableCollection<UserAd> namesAd)
-        {
-            namesAd.Clear();
+        public ObservableCollection<UserAd> LoadUsersInAd(string searchName)
+        {            
 
             try
             {
@@ -66,8 +68,7 @@ namespace Trained_WPF.Classes
 
                         foreach (var found in srch.FindAll())
                         {
-                            // DT.Rows.Add(found.DisplayName.ToString(), found.UserPrincipalName);
-                            namesAd.Add(new UserAd() { UpnAd = found.UserPrincipalName, NameAd = found.Name });
+                            _namesAd.Add(new UserAd() { UpnAd = found.UserPrincipalName, NameAd = found.Name });
                         }
                     }
                 }
@@ -77,12 +78,11 @@ namespace Trained_WPF.Classes
                 NLog.ExceptionToLog("Error loading users in AD: " + e + "");
             }
 
-
-            return namesAd;
+            return _namesAd;
 
         }
 
-        public void AddUser2Group(Label status, String userId, string groupName)
+        public void AddUser2Group(Label status, string userId, string groupName)
         {
             try
             {

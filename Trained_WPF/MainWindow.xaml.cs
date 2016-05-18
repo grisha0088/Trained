@@ -36,7 +36,7 @@ namespace Trained_WPF
                 Credentials.Content = "|  " + Environment.UserDomainName + "\\" + Environment.UserName;
                 Classes.NLog.AuthToLog("User logged");
 
-                _adClient.LoadUsersGroup(NamesGroup, _workAdGroup);
+                 NamesGroup = _adClient.LoadUsersGroup(_workAdGroup);
                 ListGroup.ItemsSource = NamesGroup;
 
                 //для фильтрации
@@ -56,18 +56,17 @@ namespace Trained_WPF
         private async void BtnSearchAd_Click(object sender, RoutedEventArgs e)
         {
             SearchName = "*" + SearchBoxAd.Text + "*";
-
-            //var slowTask = Task<ObservableCollection<UserAd>>.Factory.StartNew(() => Classes.LoadUsersInAd.LoadUsersInAdMethod(SearchName, NamesAd));
-            var slowTask = Task<ObservableCollection<UserAd>>.Factory.StartNew(() => _adClient.LoadUsersInAd(SearchName, NamesAd));
+            
+            //обнуляем коллекцию пользователей AD и заново заполняем
+            NamesAd.Clear();
+            var asyncAdListFill = Task<ObservableCollection<UserAd>>.Factory.StartNew(() => NamesAd = _adClient.LoadUsersInAd(SearchName));
 
             BtnSearchAd.IsEnabled = false;
             Loader.Visibility=Visibility.Visible;
             Loader.IsIndeterminate = true;
             status_text.Content = String.Empty;
 
-            await slowTask;
-
-            //var dt = slowTask.Result;
+            await asyncAdListFill;
 
             BtnSearchAd.IsEnabled = true;
             Loader.IsIndeterminate = false;
@@ -83,11 +82,12 @@ namespace Trained_WPF
             {
 
                 string userId = ListAd.SelectedValue.ToString();
-
-                //Classes.AddUserGroup.AddUser2Group(status_text, userId);                        
-                //Classes.LoadUsersGroup.LoadUsersGroupMethod(NamesGroup);
+                
                 _adClient.AddUser2Group(status_text, userId, _workAdGroup);
-                _adClient.LoadUsersGroup(NamesGroup, _workAdGroup);
+
+                //обнуляем коллекцию пользователей группы и заново заполняем
+                NamesGroup.Clear();
+                NamesGroup = _adClient.LoadUsersGroup(_workAdGroup);
 
                 CollectionViewSource.GetDefaultView(NamesGroup).Refresh();
             }
@@ -100,7 +100,10 @@ namespace Trained_WPF
                 string userId = ListGroup.SelectedValue.ToString();            
 
             _adClient.RevomeUser(status_text, userId, _workAdGroup);
-            _adClient.LoadUsersGroup(NamesGroup, _workAdGroup);
+             
+             //обнуляем коллекцию пользователей группы и заново заполняем
+             NamesGroup.Clear();
+             NamesGroup = _adClient.LoadUsersGroup(_workAdGroup);
             
             CollectionViewSource.GetDefaultView(NamesGroup).Refresh();
             }
@@ -119,16 +122,12 @@ namespace Trained_WPF
 
         private void GridAd_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
                 BtnAdd.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-
         }
 
         private void ListGroup_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
                 BtnRemove.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-
         }
 
 
@@ -143,8 +142,7 @@ namespace Trained_WPF
         {
             if (Application.Current.MainWindow.WindowState == WindowState.Maximized)
             {
-                Application.Current.MainWindow.WindowState = WindowState.Normal;
-                //Application.Current.MainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;     
+                Application.Current.MainWindow.WindowState = WindowState.Normal;                
                 ListAd.FontSize = 15;
                 ListGroup.FontSize = 15;
                 GroupCombo.FontSize = 15;
@@ -153,6 +151,17 @@ namespace Trained_WPF
                 BtnAdd.Height = 50;
                 BtnRemove.Width = 50;
                 BtnRemove.Height = 50;
+
+                //костыль ресайза ListView
+                foreach (var c in GridAd.Columns)
+                {
+                    c.Width = 220;
+                }
+
+                foreach (var c in GridGroup.Columns)
+                {
+                    c.Width = 220;
+                }
             }
 
             else
@@ -166,6 +175,17 @@ namespace Trained_WPF
                 BtnAdd.Height = 70;
                 BtnRemove.Width = 70;
                 BtnRemove.Height = 70;
+
+                //костыль ресайза ListView
+                foreach (var c in GridAd.Columns)
+                {
+                    c.Width = ListAd.Width / 2;
+                }
+
+                foreach (var c in GridGroup.Columns)
+                {
+                    c.Width = ListAd.Width / 2;
+                }
             }
 
         }

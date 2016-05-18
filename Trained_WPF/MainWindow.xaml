@@ -74,8 +74,8 @@
             <ListView x:Name="ListAd" BorderThickness="0" ItemsSource="{Binding}" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" FontSize="15px" FontFamily="Calibri" MouseDoubleClick="GridAd_MouseDoubleClick" SelectedValuePath="UpnAd">
                 <ListView.View>
                     <GridView x:Name="GridAd" ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle1}">
-                        <GridViewColumn Width="Auto" Header="Name" DisplayMemberBinding="{Binding NameAd}"/>
-                        <GridViewColumn Width="Auto" Header="UPN" DisplayMemberBinding="{Binding UpnAd}"/>
+                        <GridViewColumn Width="220" Header="Имя пользователя" DisplayMemberBinding="{Binding NameAd}"/>
+                        <GridViewColumn Width="220" Header="Email" DisplayMemberBinding="{Binding UpnAd}"/>
                     </GridView>
                     
                 </ListView.View>
@@ -89,8 +89,8 @@
             <ListView x:Name="ListGroup" BorderThickness="0" Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" FontSize="15px" FontFamily="Calibri" SelectedValuePath="UpnGroup" ItemsSource="{Binding namesGroup}" MouseDoubleClick="ListGroup_MouseDoubleClick">
                 <ListView.View>
                     <GridView x:Name="GridGroup">
-                        <GridViewColumn Width="Auto" Header="Name" DisplayMemberBinding="{Binding NameGroup}"/>
-                        <GridViewColumn Width="Auto" Header="UPN" DisplayMemberBinding="{Binding UpnGroup}"/>
+                        <GridViewColumn Width="220" Header="Имя пользователя" DisplayMemberBinding="{Binding NameGroup}"/>
+                        <GridViewColumn Width="220" Header="Почта" DisplayMemberBinding="{Binding UpnGroup}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
