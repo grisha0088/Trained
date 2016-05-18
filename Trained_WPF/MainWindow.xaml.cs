@@ -12,11 +12,6 @@ using Trained_WPF.Classes;
 
 namespace Trained_WPF
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
-    /// 
-    /// 
     public partial class MainWindow
     {
         public static string SearchName;
@@ -40,8 +35,8 @@ namespace Trained_WPF
                 _adClient = new AdClient(_domainName);
 
                 Credentials.Content = "|  " + Environment.UserDomainName + "\\" + Environment.UserName;
-                Authorization.UserLogged();
-                
+                Classes.NLog.AuthToLog("User logged");
+
                 _adClient.LoadUsersGroup(NamesGroup, _workAdGroup);
                 ListGroup.ItemsSource = NamesGroup;
 

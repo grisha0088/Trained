@@ -36,10 +36,5 @@ namespace Trained_WPF.Classes
             }
             return false;
         }
-
-        public static void UserLogged()
-        {
-                NLog.AuthToLog("User logged");
-        }
     }
 }
