@@ -28,7 +28,6 @@ namespace Trained_WPF
         public MainWindow()
         {
             InitializeComponent();
-            Authorization.CheckGroups(_domainName, _grouptoCheck);
             
             if (Authorization.CheckGroups(_domainName, _grouptoCheck))
             {
