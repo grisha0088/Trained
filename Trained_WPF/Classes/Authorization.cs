@@ -1,38 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
+using System.Linq;
 
 namespace Trained_WPF.Classes
 {
     public class Authorization
     {
+        //Проверяем, что пользователь в группе
         public static bool CheckGroups(string domainName, string grouptoCheck)
         {
-            //Проверяем, что пользователь в группе
-            PrincipalContext ctx = new PrincipalContext(ContextType.Domain, domainName);
-            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, Environment.UserDomainName + "\\" + Environment.UserName);            
+            PrincipalContext ctx = new PrincipalContext(ContextType.Domain, domainName); 
+            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, Environment.UserDomainName + "\\" + Environment.UserName); //получаем пользователя            
 
-            List<GroupPrincipal> result = new List<GroupPrincipal>();
-
-            if (user != null)
+            if (user != null) 
             {
-                PrincipalSearchResult<Principal> groups = user.GetGroups();
-
-                foreach (Principal p in groups)
-                {
-                    var item = p as GroupPrincipal;
-                    if (item != null)
-                    {
-                        result.Add(item);
-                        string results = String.Join(", ", result);
-
-                        if (results.Contains(grouptoCheck))
-                        {                            
-                            return true;
-                        }
-                    }
-                }
-                return false;
+                PrincipalSearchResult<Principal> groups = user.GetGroups(); //полкчаем группы пользователя
+                return groups.Any(p => p.Name == grouptoCheck); //проверяем, есть ли там искомая группа
             }
             return false;
         }
