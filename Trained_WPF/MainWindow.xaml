@@ -90,7 +90,7 @@
                 <ListView.View>
                     <GridView x:Name="GridGroup">
                         <GridViewColumn Width="220" Header="Имя пользователя" DisplayMemberBinding="{Binding Name}"/>
-                        <GridViewColumn Width="220" Header="Почта" DisplayMemberBinding="{Binding Upn}"/>
+                        <GridViewColumn Width="220" Header="Email" DisplayMemberBinding="{Binding Upn}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
