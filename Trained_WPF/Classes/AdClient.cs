@@ -9,15 +9,15 @@ namespace Trained_WPF.Classes
    {
         private readonly string _domainName;
 
-        private readonly ObservableCollection<UserAd> _namesAd = new ObservableCollection<UserAd>();
-        private readonly ObservableCollection<UserGroup> _namesGroup = new ObservableCollection<UserGroup>();
+        private readonly ObservableCollection<User> _namesAd = new ObservableCollection<User>();
+        private readonly ObservableCollection<User> _namesGroup = new ObservableCollection<User>();
 
         public AdClient(string domainName)
        {
             _domainName = domainName;                        
        }
 
-        public ObservableCollection<UserGroup> LoadUsersGroup(string groupName)
+        public ObservableCollection<User> LoadUsersGroup(string groupName)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace Trained_WPF.Classes
                             foreach (var principal in users)
                             {
                                 var user = (UserPrincipal) principal;
-                                _namesGroup.Add(new UserGroup() { UpnGroup = user.UserPrincipalName, NameGroup = user.Name });
+                                _namesGroup.Add(new User() { Upn = user.UserPrincipalName, Name = user.Name });
                             }
                         }
                     }
@@ -51,7 +51,7 @@ namespace Trained_WPF.Classes
 
         }
 
-        public ObservableCollection<UserAd> LoadUsersInAd(string searchName)
+        public ObservableCollection<User> LoadUsersInAd(string searchName)
         {            
 
             try
@@ -68,7 +68,7 @@ namespace Trained_WPF.Classes
 
                         foreach (var found in srch.FindAll())
                         {
-                            _namesAd.Add(new UserAd() { UpnAd = found.UserPrincipalName, NameAd = found.Name });
+                            _namesAd.Add(new User() { Upn = found.UserPrincipalName, Name = found.Name });
                         }
                     }
                 }

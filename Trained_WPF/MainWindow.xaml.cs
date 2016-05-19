@@ -16,8 +16,8 @@ namespace Trained_WPF
     {
         public static string SearchName;
 
-        public static ObservableCollection<UserGroup> NamesGroup = new ObservableCollection<UserGroup>();
-        public static ObservableCollection<UserAd> NamesAd = new ObservableCollection<UserAd>();
+        public static ObservableCollection<User> NamesGroup = new ObservableCollection<User>();
+        public static ObservableCollection<User> NamesAd = new ObservableCollection<User>();
 
         readonly string _grouptoCheck = ConfigurationManager.AppSettings["GrouptoCheck"];
         readonly string _workAdGroup = ConfigurationManager.AppSettings["FijiGroupName"];
@@ -59,7 +59,7 @@ namespace Trained_WPF
             
             //обнуляем коллекцию пользователей AD и заново заполняем
             NamesAd.Clear();
-            var asyncAdListFill = Task<ObservableCollection<UserAd>>.Factory.StartNew(() => NamesAd = _adClient.LoadUsersInAd(SearchName));
+            var asyncAdListFill = Task<ObservableCollection<User>>.Factory.StartNew(() => NamesAd = _adClient.LoadUsersInAd(SearchName));
 
             BtnSearchAd.IsEnabled = false;
             Loader.Visibility=Visibility.Visible;
@@ -75,16 +75,15 @@ namespace Trained_WPF
             ListAd.ItemsSource = NamesAd.ToList();
         }
 
-
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
+            //надо бы прикрутить сюда async и progressbar
+
             if (ListAd.SelectedValue != null)
             {
-
                 string userId = ListAd.SelectedValue.ToString();
-                
                 _adClient.AddUser2Group(status_text, userId, _workAdGroup);
-
+      
                 //обнуляем коллекцию пользователей группы и заново заполняем
                 NamesGroup.Clear();
                 NamesGroup = _adClient.LoadUsersGroup(_workAdGroup);
@@ -92,7 +91,6 @@ namespace Trained_WPF
                 CollectionViewSource.GetDefaultView(NamesGroup).Refresh();
             }
         }
-
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
         {
             if (ListGroup.SelectedValue != null)
@@ -109,9 +107,6 @@ namespace Trained_WPF
             }
         }
 
-
-        
-
         private void SearchBoxAd_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -119,25 +114,19 @@ namespace Trained_WPF
                 BtnSearchAd.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
             }
         }
-
         private void GridAd_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
                 BtnAdd.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
         }
-
         private void ListGroup_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
                 BtnRemove.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
         }
-
-
-
         
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
-
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
             if (Application.Current.MainWindow.WindowState == WindowState.Maximized)
@@ -189,7 +178,6 @@ namespace Trained_WPF
             }
 
         }
-
         private void Minimize_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.MainWindow.WindowState = WindowState.Minimized;
@@ -201,8 +189,6 @@ namespace Trained_WPF
                 DragMove();
         }
 
-
-
         //фильтруем ListGroup
         private bool UserFilter(object item)
         {
@@ -212,8 +198,8 @@ namespace Trained_WPF
             }
             else
             {
-                var userGroup = item as UserGroup;
-                return userGroup != null && (userGroup.NameGroup.IndexOf(GroupFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+                var userGroup = item as User;
+                return userGroup != null && (userGroup.Name.IndexOf(GroupFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0);
             }
         }
         private void GroupFilter_TextChanged(object sender, TextChangedEventArgs e)
