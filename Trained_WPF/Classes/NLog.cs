@@ -45,6 +45,5 @@ namespace Trained_WPF.Classes
                 // ignored
             }
         }
-
     }
 }

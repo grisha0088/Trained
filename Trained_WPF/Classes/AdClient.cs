@@ -53,7 +53,6 @@ namespace Trained_WPF.Classes
 
         public ObservableCollection<User> LoadUsersInAd(string searchName)
         {            
-
             try
             {
                 using (var ctx = new PrincipalContext(ContextType.Domain, _domainName))
@@ -77,9 +76,7 @@ namespace Trained_WPF.Classes
             {
                 NLog.ExceptionToLog("Error loading users in AD: " + e + "");
             }
-
             return _namesAd;
-
         }
 
         public void AddUser2Group(Label status, string userId, string groupName)

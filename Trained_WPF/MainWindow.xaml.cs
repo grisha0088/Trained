@@ -28,7 +28,7 @@ namespace Trained_WPF
         public MainWindow()
         {
             InitializeComponent();
-            
+
             if (Authorization.CheckGroups(_domainName, _grouptoCheck))
             {
                 _adClient = new AdClient(_domainName);
@@ -36,7 +36,7 @@ namespace Trained_WPF
                 Credentials.Content = "|  " + Environment.UserDomainName + "\\" + Environment.UserName;
                 Classes.NLog.AuthToLog("User logged");
 
-                 NamesGroup = _adClient.LoadUsersGroup(_workAdGroup);
+                NamesGroup = _adClient.LoadUsersGroup(_workAdGroup);
                 ListGroup.ItemsSource = NamesGroup;
 
                 //для фильтрации
@@ -176,7 +176,6 @@ namespace Trained_WPF
                     c.Width = ListAd.Width / 2;
                 }
             }
-
         }
         private void Minimize_Click(object sender, RoutedEventArgs e)
         {

@@ -21,8 +21,6 @@
 
     <Border x:Name="MainBorder" BorderThickness="1.5" BorderBrush="LightGray">
 
-
-
         <Grid x:Name="MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="34px"/>
@@ -69,22 +67,14 @@
 
             </Border>
 
-
-
             <ListView x:Name="ListAd" BorderThickness="0" ItemsSource="{Binding}" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" FontSize="15px" FontFamily="Calibri" MouseDoubleClick="GridAd_MouseDoubleClick" SelectedValuePath="Upn">
                 <ListView.View>
                     <GridView x:Name="GridAd" ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle1}">
                         <GridViewColumn Width="220" Header="Имя пользователя" DisplayMemberBinding="{Binding Name}"/>
                         <GridViewColumn Width="220" Header="Email" DisplayMemberBinding="{Binding Upn}"/>
                     </GridView>
-                    
                 </ListView.View>
-
             </ListView>
-
-
-
-
 
             <ListView x:Name="ListGroup" BorderThickness="0" Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" FontSize="15px" FontFamily="Calibri" ItemsSource="{Binding namesGroup}" MouseDoubleClick="ListGroup_MouseDoubleClick" SelectedValuePath="Upn">
                 <ListView.View>
@@ -120,7 +110,6 @@
                 </Button>
             </Grid>
 
-
             <Border x:Name="StatusBar" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5" Background="#FF00AADE">
                 <Grid x:Name="GridStatusBar">
                     <Grid.ColumnDefinitions>
@@ -146,7 +135,6 @@
                     <ComboBoxItem Content="Fiji"></ComboBoxItem>
                 </ComboBox>
             </Grid>
-
         </Grid>
     </Border>
 </Window>
