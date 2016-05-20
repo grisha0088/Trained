@@ -48,7 +48,8 @@ namespace Trained_WPF
             }
             else
             {
-                MessageBox.Show("Похоже, у вас нет прав");
+                Classes.NLog.AuthToLog("Access denied");
+                MessageBox.Show("Похоже, у вас нет прав." + System.Environment.NewLine +"Обратитесь в техническую поддержку support@2gis.ru.");
                 Application.Current.Shutdown();
             }
         }
