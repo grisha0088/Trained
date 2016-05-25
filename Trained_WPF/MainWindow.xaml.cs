@@ -9,6 +9,8 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using Trained_WPF.Classes;
+using MahApps.Metro.Controls;
+
 
 namespace Trained_WPF
 {
@@ -124,39 +126,31 @@ namespace Trained_WPF
                 BtnRemove.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
         }
         
-        private void Close_Click(object sender, RoutedEventArgs e)
+
+
+        //фильтруем ListGroup
+        private bool UserFilter(object item)
         {
-            Application.Current.Shutdown();
-        }
-        private void Maximize_Click(object sender, RoutedEventArgs e)
-        {
-            if (Application.Current.MainWindow.WindowState == WindowState.Maximized)
-            {
-                Application.Current.MainWindow.WindowState = WindowState.Normal;                
-                ListAd.FontSize = 15;
-                ListGroup.FontSize = 15;
-                GroupCombo.FontSize = 15;
-
-                BtnAdd.Width = 50;
-                BtnAdd.Height = 50;
-                BtnRemove.Width = 50;
-                BtnRemove.Height = 50;
-
-                //костыль ресайза ListView
-                foreach (var c in GridAd.Columns)
-                {
-                    c.Width = 220;
-                }
-
-                foreach (var c in GridGroup.Columns)
-                {
-                    c.Width = 220;
-                }
+            if (String.IsNullOrEmpty(GroupFilter.Text))
+            { 
+                return true;
             }
-
             else
             {
-                Application.Current.MainWindow.WindowState = WindowState.Maximized;
+                var userGroup = item as User;
+                return userGroup != null && (userGroup.Name.IndexOf(GroupFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
+        }
+        private void GroupFilter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CollectionViewSource.GetDefaultView(ListGroup.ItemsSource).Refresh();
+        }
+
+        //меняем шрифт при критическом ресайзе
+        private void MetroWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
                 ListAd.FontSize = 20;
                 ListGroup.FontSize = 20;
                 GroupCombo.FontSize = 17;
@@ -177,34 +171,30 @@ namespace Trained_WPF
                     c.Width = ListAd.Width / 2;
                 }
             }
-        }
-        private void Minimize_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.MainWindow.WindowState = WindowState.Minimized;
-        }
-
-        private void WindowHeader_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-                DragMove();
-        }
-
-        //фильтруем ListGroup
-        private bool UserFilter(object item)
-        {
-            if (String.IsNullOrEmpty(GroupFilter.Text))
-            { 
-                return true;
-            }
-            else
+            if (this.WindowState == WindowState.Normal)
             {
-                var userGroup = item as User;
-                return userGroup != null && (userGroup.Name.IndexOf(GroupFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+
+
+                ListAd.FontSize = 15;
+                ListGroup.FontSize = 15;
+                GroupCombo.FontSize = 15;
+
+                BtnAdd.Width = 50;
+                BtnAdd.Height = 50;
+                BtnRemove.Width = 50;
+                BtnRemove.Height = 50;
+
+                //костыль ресайза ListView
+                foreach (var c in GridAd.Columns)
+                {
+                    c.Width = 220;
+                }
+
+                foreach (var c in GridGroup.Columns)
+                {
+                    c.Width = 220;
+                }
             }
-        }
-        private void GroupFilter_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            CollectionViewSource.GetDefaultView(ListGroup.ItemsSource).Refresh();
         }
     }
 
