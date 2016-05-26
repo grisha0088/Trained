@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Trained_WPF"
-        mc:Ignorable="d"
-        
-
+        mc:Ignorable="d"                               
+                       
         
         Icon="Icons/Logo_ico_transparent.png" RenderOptions.BitmapScalingMode="HighQuality"
         WindowStartupLocation="CenterScreen"                  
@@ -15,17 +14,21 @@
 
     <Window.Resources>
         <ResourceDictionary>
-            <Style x:Key="GridViewColumnHeaderStyle1" TargetType="{x:Type GridViewColumnHeader}">
-            </Style>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+    
 
+
+    
     <Border x:Name="MainBorder" BorderThickness="1.5" BorderBrush="LightGray">
 
         <Grid x:Name="MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50px"/>
-
+                <RowDefinition Height="10px"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="30px"/>
                 <RowDefinition Height="25px"/>
@@ -41,26 +44,33 @@
             <Border x:Name="WindowHeaderPlus" Background="#FFF9F9F9" Grid.Column="0" Grid.Row="0"  Grid.ColumnSpan="5">
 
             </Border>
-            
-            <ListView x:Name="ListAd" BorderThickness="0" ItemsSource="{Binding}" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" FontSize="15px" FontFamily="Calibri" MouseDoubleClick="GridAd_MouseDoubleClick" SelectedValuePath="Upn">
+
+            <controls:MetroProgressBar x:Name="LoaderOver" Background="{StaticResource GrayBrush2}"
+                                       BorderBrush="{StaticResource GrayBrush8}"
+                                       BorderThickness="3"                    
+                                       EllipseDiameter="3"
+                                       Foreground="#FF41B1E1"
+                                       IsIndeterminate="False" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" HorizontalAlignment="Stretch" Visibility="Hidden" Height="15" VerticalAlignment="Stretch" Width="auto" />
+
+            <ListView x:Name="ListAd" BorderThickness="0" ItemsSource="{Binding}" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" FontSize="15px" FontFamily="Calibri" MouseDoubleClick="GridAd_MouseDoubleClick" SelectedValuePath="Sam">
                 <ListView.View>
                     <GridView x:Name="GridAd">
                         <GridViewColumn Width="220" Header="Имя пользователя" DisplayMemberBinding="{Binding Name}"/>
-                        <GridViewColumn Width="220" Header="Email" DisplayMemberBinding="{Binding Upn}"/>
+                        <GridViewColumn Width="220" Header="Логин" DisplayMemberBinding="{Binding Sam}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
 
-            <ListView x:Name="ListGroup" BorderThickness="0" Grid.Column="3" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" FontSize="15px" FontFamily="Calibri" ItemsSource="{Binding namesGroup}" MouseDoubleClick="ListGroup_MouseDoubleClick" SelectedValuePath="Upn">
+            <ListView x:Name="ListGroup" BorderThickness="0" Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="White" FontSize="15px" FontFamily="Calibri" ItemsSource="{Binding namesGroup}" MouseDoubleClick="ListGroup_MouseDoubleClick" SelectedValuePath="Sam">
                 <ListView.View>
                     <GridView x:Name="GridGroup">
                         <GridViewColumn Width="220" Header="Имя пользователя" DisplayMemberBinding="{Binding Name}"/>
-                        <GridViewColumn Width="220" Header="Email" DisplayMemberBinding="{Binding Upn}"/>
+                        <GridViewColumn Width="220" Header="Логин" DisplayMemberBinding="{Binding Sam}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
 
-            <Grid x:Name="ButtonGrid" Grid.Row="1" Grid.Column="2">
+            <Grid x:Name="ButtonGrid" Grid.Row="2" Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="20px"/>
@@ -85,7 +95,7 @@
                 </Button>
             </Grid>
 
-            <Border x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5" Background="#FF41B1E1">
+            <Border x:Name="StatusBar" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5" Background="#FF41B1E1">
                 <Grid x:Name="GridStatusBar">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -117,6 +127,27 @@
             </Grid>
         </Grid>
     </Border>
+
+
+    <controls:MetroWindow.RightWindowCommands>
+        <controls:WindowCommands>
+            <Button Click="faq_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+                   Height="20"
+                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_question}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"
+                   VerticalAlignment="Center"
+                   Text="" />
+                </StackPanel>
+            </Button>
+        </controls:WindowCommands>
+    </controls:MetroWindow.RightWindowCommands>
+
 </controls:MetroWindow>
 
     

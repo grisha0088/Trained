@@ -18,7 +18,7 @@ namespace Trained_WPF.Classes
        }
 
         public ObservableCollection<User> LoadUsersGroup(string groupName)
-        {
+        {            
             try
             {
                 using (var ctx = new PrincipalContext(ContextType.Domain, _domainName))
@@ -35,7 +35,7 @@ namespace Trained_WPF.Classes
                             foreach (var principal in users)
                             {
                                 var user = (UserPrincipal) principal;
-                                _namesGroup.Add(new User() { Upn = user.UserPrincipalName, Name = user.Name });
+                                _namesGroup.Add(new User() { Sam = user.SamAccountName, Name = user.Name });
                             }
                         }
                     }
@@ -67,7 +67,7 @@ namespace Trained_WPF.Classes
 
                         foreach (var found in srch.FindAll())
                         {
-                            _namesAd.Add(new User() { Upn = found.UserPrincipalName, Name = found.Name });
+                            _namesAd.Add(new User() { Sam = found.SamAccountName, Name = found.Name });                            
                         }
                     }
                 }
@@ -88,7 +88,7 @@ namespace Trained_WPF.Classes
                     GroupPrincipal group = GroupPrincipal.FindByIdentity(ctx, groupName);
                     if (group != null)
                     { 
-                    group.Members.Add(ctx, IdentityType.UserPrincipalName, userId);
+                    group.Members.Add(ctx, IdentityType.SamAccountName, userId);
                     group.Save();
                     }
                 }
@@ -120,7 +120,7 @@ namespace Trained_WPF.Classes
                     GroupPrincipal group = GroupPrincipal.FindByIdentity(ctx, groupName);
                     if (group != null)
                     { 
-                    group.Members.Remove(ctx, IdentityType.UserPrincipalName, userId);
+                    group.Members.Remove(ctx, IdentityType.SamAccountName, userId);
                     group.Save();
                     }
                 }

@@ -9,7 +9,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using Trained_WPF.Classes;
-using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 
 namespace Trained_WPF
@@ -40,6 +40,11 @@ namespace Trained_WPF
 
                 NamesGroup = _adClient.LoadUsersGroup(_workAdGroup);
                 ListGroup.ItemsSource = NamesGroup;
+                
+                //добавляем сортировку по алфавиту в ListGroup
+                ListGroup.Items.SortDescriptions.Add(
+    new System.ComponentModel.SortDescription("Name",
+       System.ComponentModel.ListSortDirection.Ascending));
 
                 //для фильтрации
                 CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(ListGroup.ItemsSource);
@@ -51,7 +56,7 @@ namespace Trained_WPF
             else
             {
                 Classes.NLog.AuthToLog("Access denied");
-                MessageBox.Show("Похоже, у вас нет прав." + System.Environment.NewLine +"Обратитесь в техническую поддержку support@2gis.ru.");
+                MessageBox.Show("Похоже, у вас нет прав." + Environment.NewLine +"Обратитесь в техническую поддержку support@2gis.ru.");
                 Application.Current.Shutdown();
             }
         }
@@ -67,15 +72,29 @@ namespace Trained_WPF
             BtnSearchAd.IsEnabled = false;
             Loader.Visibility=Visibility.Visible;
             Loader.IsIndeterminate = true;
+
+            //включаем дополнительный лоадер
+            //LoaderOver.Visibility = Visibility.Visible;
+            //LoaderOver.IsIndeterminate = true;
             status_text.Content = String.Empty;
 
             await asyncAdListFill;
 
             BtnSearchAd.IsEnabled = true;
             Loader.IsIndeterminate = false;
+
             Loader.Visibility = Visibility.Hidden;
 
+            //выключаем дополнительный лоадер
+            //LoaderOver.IsIndeterminate = false;
+            //LoaderOver.Visibility = Visibility.Hidden;            
+
             ListAd.ItemsSource = NamesAd.ToList();
+
+            //добавляем сортировку по алфавиту в ListAd
+            ListAd.Items.SortDescriptions.Add(
+new System.ComponentModel.SortDescription("Name",
+   System.ComponentModel.ListSortDirection.Ascending));
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
@@ -85,12 +104,12 @@ namespace Trained_WPF
             if (ListAd.SelectedValue != null)
             {
                 string userId = ListAd.SelectedValue.ToString();
-                _adClient.AddUser2Group(status_text, userId, _workAdGroup);
-      
+                _adClient.AddUser2Group(status_text, userId, _workAdGroup);                      
+
                 //обнуляем коллекцию пользователей группы и заново заполняем
                 NamesGroup.Clear();
                 NamesGroup = _adClient.LoadUsersGroup(_workAdGroup);
-
+                
                 CollectionViewSource.GetDefaultView(NamesGroup).Refresh();
             }
         }
@@ -126,7 +145,7 @@ namespace Trained_WPF
                 BtnRemove.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
         }
         
-
+         
 
         //фильтруем ListGroup
         private bool UserFilter(object item)
@@ -143,13 +162,13 @@ namespace Trained_WPF
         }
         private void GroupFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CollectionViewSource.GetDefaultView(ListGroup.ItemsSource).Refresh();
+             CollectionViewSource.GetDefaultView(ListGroup.ItemsSource).Refresh();
         }
 
         //меняем шрифт при критическом ресайзе
         private void MetroWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (this.WindowState == WindowState.Maximized)
+            if (WindowState == WindowState.Maximized)
             {
                 ListAd.FontSize = 20;
                 ListGroup.FontSize = 20;
@@ -171,7 +190,7 @@ namespace Trained_WPF
                     c.Width = ListAd.Width / 2;
                 }
             }
-            if (this.WindowState == WindowState.Normal)
+            if (WindowState == WindowState.Normal)
             {
 
 
@@ -195,6 +214,14 @@ namespace Trained_WPF
                     c.Width = 220;
                 }
             }
+        }
+
+        private void faq_Click(object sender, RoutedEventArgs e)
+        {
+            //переделать на чтение из ресурсного файла
+            this.ShowMessageAsync("Trained", "Слева отображается список всех пользователей Active Directory, справа - пользователи группы, прошедшие обучение в Fiji" + Environment.NewLine + Environment.NewLine +
+            "Чтобы добавить пользователя в группу, дважды кликните по пользователю в списке Active Directory. Чтобы удалить пользователя из группы, дважды кликните по пользователю в списке группы." + Environment.NewLine + Environment.NewLine +
+            "Синяя полоса внизу экрана отображает процесс поиска пользователей и результат выполненного действия.");
         }
     }
 
