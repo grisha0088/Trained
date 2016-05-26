@@ -131,6 +131,9 @@
 
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
+            <Button Click="help_Click">
+                HELP
+            </Button>
             <Button Click="faq_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
