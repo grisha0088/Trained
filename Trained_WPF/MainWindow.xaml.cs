@@ -219,7 +219,7 @@ new System.ComponentModel.SortDescription("Name",
         private void faq_Click(object sender, RoutedEventArgs e)
         {
             //надо переделать на чтение из ресурсного файла
-            this.ShowMessageAsync("Trained", "Слева отображается список всех пользователей Active Directory, справа - пользователи группы, прошедшие обучение в Fiji" + Environment.NewLine + Environment.NewLine +
+            this.ShowMessageAsync("Trained", "Слева отображается список всех пользователей Active Directory, справа - пользователи, прошедшие обучение в Fiji" + Environment.NewLine + Environment.NewLine +
             "Чтобы добавить пользователя в группу, дважды кликните по пользователю в списке Active Directory. Чтобы удалить пользователя из группы, дважды кликните по пользователю в списке группы." + Environment.NewLine + Environment.NewLine +
             "Синяя полоса внизу экрана отображает процесс поиска пользователей и результат выполненного действия.");
         }
